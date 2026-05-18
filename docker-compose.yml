@@ -1,12 +1,28 @@
 services:
+  mongo:
+    image: mongo:6
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - appnet
+
   backend:
     build: ./backend
     ports:
       - '5000:5000'
     environment:
       - PORT=5000
+      - MONGO_URI=mongodb://mongo:27017/paymentapp
       - JWT_SECRET=mysecretkey123
       - FAST2SMS_API_KEY=your_api_key_here
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+      - TWILIO_WHATSAPP_NUMBER=whatsapp:+14155238886
+      - TWILIO_PHONE_NUMBER=+14155238886
+    depends_on:
+      - mongo
     networks:
       - appnet
 
@@ -21,3 +37,6 @@ services:
 
 networks:
   appnet:
+
+volumes:
+  mongo-data:
