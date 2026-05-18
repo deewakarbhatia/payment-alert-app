@@ -1,0 +1,79 @@
+pipeline {
+  agent any
+
+  environment {
+    DOCKER_HUB = 'deewakarbhatia'
+    IMAGE_BACKEND = "${DOCKER_HUB}/payment-backend"
+    IMAGE_FRONTEND = "${DOCKER_HUB}/payment-frontend"
+  }
+
+  stages {
+
+    stage('Checkout') {
+      steps {
+        echo 'Checking out code from GitHub...'
+        checkout scm
+      }
+    }
+
+    stage('Install Backend') {
+      steps {
+        echo 'Installing backend dependencies...'
+        dir('backend') {
+          sh 'npm install'
+        }
+      }
+    }
+
+    stage('Install Frontend') {
+      steps {
+        echo 'Installing frontend dependencies...'
+        dir('frontend') {
+          sh 'npm install'
+        }
+      }
+    }
+
+    stage('Docker Build') {
+      steps {
+        echo 'Building Docker images...'
+        sh "docker build -t ${IMAGE_BACKEND}:latest ./backend"
+        sh "docker build -t ${IMAGE_FRONTEND}:latest ./frontend"
+      }
+    }
+
+    stage('Docker Push') {
+      steps {
+        echo 'Pushing images to Docker Hub...'
+        withCredentials([usernamePassword(
+          credentialsId: 'dockerhub-creds',
+          usernameVariable: 'USER',
+          passwordVariable: 'PASS'
+        )]) {
+          sh "echo $PASS | docker login -u $USER --password-stdin"
+          sh "docker push ${IMAGE_BACKEND}:latest"
+          sh "docker push ${IMAGE_FRONTEND}:latest"
+        }
+      }
+    }
+
+    stage('Deploy') {
+      steps {
+        echo 'Deploying application...'
+        sh 'docker compose down'
+        sh 'docker compose up -d'
+        echo 'Deployment complete!'
+      }
+    }
+
+  }
+
+  post {
+    success {
+      echo '✅ Pipeline completed successfully!'
+    }
+    failure {
+      echo '❌ Pipeline failed!'
+    }
+  }
+}

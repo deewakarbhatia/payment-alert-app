@@ -1,5 +1,5 @@
 PORT=5000
-MONGO_URI=mongodb://127.0.0.1:27017/paymentapp
+MONGO_URI=mongodb://mongo:27017/paymentapp
 JWT_SECRET=mysecretkey123
 TWILIO_ACCOUNT_SID=your_twilio_sid
 TWILIO_AUTH_TOKEN=your_twilio_token

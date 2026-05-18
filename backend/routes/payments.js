@@ -13,6 +13,12 @@ router.post('/', auth, async (req, res) => {
         });
         await payment.save();
 
+        // ── Prometheus counter ──
+        req.app.locals.paymentCounter.inc({
+            type: payment.type,
+            method: payment.method
+        });
+
         // Send WhatsApp/SMS alert
         const alertResult = await sendPaymentAlert(payment);
         payment.whatsappSent = alertResult.sent;
