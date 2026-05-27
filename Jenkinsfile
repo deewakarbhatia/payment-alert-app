@@ -20,23 +20,7 @@ pipeline {
       }
     }
 
-    stage('Install Backend') {
-      steps {
-        echo 'Installing backend dependencies...'
-        dir('backend') {
-          sh 'npm install'
-        }
-      }
-    }
 
-    stage('Install Frontend') {
-      steps {
-        echo 'Installing frontend dependencies...'
-        dir('frontend') {
-          sh 'npm install'
-        }
-      }
-    }
 
     stage('Docker Build') {
       steps {
