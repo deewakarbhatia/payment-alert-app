@@ -1,6 +1,10 @@
 pipeline {
   agent any
 
+  triggers {
+    pollSCM('* * * * *')
+  }
+
   environment {
     DOCKER_HUB = 'deewakarbhatia'
     IMAGE_BACKEND = "${DOCKER_HUB}/payment-backend"
