@@ -36,7 +36,7 @@ export default function Signup() {
                 <p style={{ color: '#888', marginBottom: 24 }}>Create a new account</p>
                 {error && <p style={{ color: 'red', marginBottom: 12 }}>{error}</p>}
                 {success && <p style={{ color: 'green', marginBottom: 12 }}>{success}</p>}
-                
+
                 <form onSubmit={handleSubmit}>
                     <input
                         placeholder='Full Name'
@@ -81,7 +81,7 @@ export default function Signup() {
                         <option value='agent'>Agent</option>
                         <option value='admin'>Admin</option>
                     </select>
-                    
+
                     <button type='submit' style={{
                         width: '100%', padding: 12,
                         background: '#1A5276', color: '#fff',
@@ -90,7 +90,7 @@ export default function Signup() {
                     }}>
                         Sign Up
                     </button>
-                    
+
                     <div style={{ textAlign: 'center', fontSize: 14 }}>
                         Already have an account? <Link to='/login' style={{ color: '#1A5276' }}>Login here</Link>
                     </div>
